@@ -1,0 +1,68 @@
+ // SELECT name,price FROM prods;
+  // 1 - תציג רק את המאפיין הזה
+  // 0 - תציג הכל חוץ מהמאפיין הנל
+  prodsModel.find({},{name:1,price:1})
+    .then(data => {
+      res.json(data)
+    })
+
+
+
+     // Select * FROM prods WHERE cat = "food"
+  prodsModel.find({cat:"food"})
+    .then(data => {
+      res.json(data)
+    })
+
+
+    // Select * FROM prods WHERE cat = "food" ORDER BY name DESC 
+  prodsModel.find({cat:"food"})
+    .sort({name:-1})
+    .then(data => {
+      res.json(data)
+    })
+
+
+    // Select * FROM prods  ORDER BY name ASC
+  // LIMIT 4,4 
+  prodsModel.find({})
+    .sort({id:1})
+    .skip(4)
+    .limit(4)
+    .then(data => {
+      res.json(data)
+    })
+
+     // Select * FROM prods  WHERE price >= 70;
+  prodsModel.find({price:{$lte:70}})
+    .then(data => {
+      res.json(data)
+    })
+
+      // Select * FROM prods WHERE name like %food% OR cat like %food%;
+  let searchQ = new RegExp('food')
+  prodsModel.find({$or:[{name:searchQ},{cat:searchQ}]})
+    .then(data => {
+      res.json(data)
+    })
+
+    // Select * FROM prods WHERE name in ('Bread','Eggs')
+  // Select * FROM prods WHERE name = 'bread' or name = 'eggs'
+
+  prodsModel.find({name:{$in:['Bread','Eggs']}})
+    .then(data => {
+      res.json(data)
+    })
+
+  //INSERT
+  // INSERT INTO prods (cat,name,price,image) VALUE ("food","Besli",5,"....")
+  req.body
+
+  prodsModel.insertMany([{cat:"food",name:"Popcorn",price:5,image:"https://images.pexels.com/photos/33129/popcorn-movie-party-entertainment.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500"}])
+  .then(data => {
+    res.status(201).json(data[0])
+  })
+  .catch(err => {
+    res.status(400).json(err)
+  })
+
